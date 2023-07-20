@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поиск пользователей</title>
+    <!-- Подключение стилей Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Поиск пользователей</h1>
+
+    <!-- Форма поиска -->
+    <form action="/" method="GET" class="mt-4 mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Поиск по имени, email или телефону" value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
+    </form>
+
+    <!-- Таблица пользователей -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Телефон</th>
+            <th>ID метки</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users.items %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.tagId }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Пагинация -->
+    <nav aria-label="Навигация">
+        <ul class="pagination">
+            {% if users.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="?search={{ search_query }}&page={{ users.prev_num }}"><i class="bi bi-arrow-left"></i></a>
+            </li>
+            {% endif %}
+            {% for page in users.iter_pages() %}
+            {% if page %}
+            <li class="page-item {% if page == users.page %}active{% endif %}">
+                <a class="page-link" href="?search={{ search_query }}&page={{ page }}">{{ page }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+            {% if users.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?search={{ search_query }}&page={{ users.next_num }}"> <i class="bi bi-arrow-right"></i></a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<!-- Подключение скриптов Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
